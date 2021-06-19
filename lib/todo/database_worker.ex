@@ -20,7 +20,8 @@ defmodule Todo.DatabaseWorker do
   end
 
   def handle_cast({:store, key, data}, dir_name) do
-    file_name(dir_name, key)
+    dir_name
+    |> file_name(key)
     |> File.write!(:erlang.term_to_binary(data))
 
     {:noreply, dir_name}
@@ -40,4 +41,3 @@ defmodule Todo.DatabaseWorker do
     Path.join(dir_name, to_string(key))
   end
 end
-
