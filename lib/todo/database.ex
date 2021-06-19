@@ -4,44 +4,48 @@ defmodule Todo.Database do
   @db_folder "./persist"
 
   def start do
-    {:ok, worker1} = Todo.DatabaseWorker.start(folder_name("worker_1"))
-    {:ok, worker2} = Todo.DatabaseWorker.start(folder_name("worker_2"))
-    {:ok, worker3} = Todo.DatabaseWorker.start(folder_name("worker_3"))
-
-    workers = %{0 => worker1, 1 => worker2, 2 => worker3}
-
-    GenServer.start(__MODULE__, workers, name: __MODULE__)
+    GenServer.start(__MODULE__, nil, name: __MODULE__)
   end
 
   def store(key, data) do
-    worker_pid = choose_worker(key)
-
-    Todo.DatabaseWorker.store(worker_pid, key, data)
+    key
+    |> choose_worker()
+    |> Todo.DatabaseWorker.store(key, data)
   end
 
   def get(key) do
-    worker_pid = choose_worker(key)
-
-    Todo.DatabaseWorker.get(worker_pid, key)
+    key
+    |> choose_worker()
+    |> Todo.DatabaseWorker.get(key)
   end
 
   def choose_worker(key) do
     GenServer.call(__MODULE__, {:choose_worker, key})
   end
 
-  def init(workers) do
-    File.mkdir_p!(@db_folder)
-    {:ok, workers}
+  def init(_) do
+    {:ok, nil, {:continue, :init}}
   end
 
   def handle_call({:choose_worker, key}, _, workers) do
-    worker_pid = Map.fetch!(workers, :erlang.phash2(key, map_size(workers)))
+    worker_key = :erlang.phash2(key, map_size(workers))
 
-    {:reply, worker_pid, workers}
+    {:reply, Map.get(workers, worker_key), workers}
+  end
+
+  def handle_continue(:init, _) do
+    File.mkdir_p!(@db_folder)
+    {:noreply, start_workers()}
+  end
+
+  defp start_workers do
+    for index <- 1..3, into: %{} do
+      {:ok, pid} = Todo.DatabaseWorker.start(folder_name("worker_#{index}"))
+      {index - 1, pid}
+    end
   end
 
   defp folder_name(key) do
     Path.join(@db_folder, to_string(key))
   end
 end
-
