@@ -47,4 +47,3 @@ defmodule Todo.List do
     %Todo.List{todo_list | entries: Map.delete(todo_list.entries, entry_id)}
   end
 end
-

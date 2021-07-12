@@ -53,4 +53,3 @@ defmodule Todo.Server do
     {:noreply, {list_name, todo_list}}
   end
 end
-
