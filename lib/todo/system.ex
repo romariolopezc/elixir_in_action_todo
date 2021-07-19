@@ -7,8 +7,8 @@ defmodule Todo.System do
 
   def init(_) do
     children = [
-      Todo.Cache,
-      Todo.Database
+      Todo.Database,
+      Todo.Cache
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
