@@ -8,8 +8,6 @@ defmodule Todo.Cache do
   end
 
   def server_process(todo_list_name) do
-    IO.puts("Starting to-do server for #{todo_list_name}")
-
     GenServer.call(__MODULE__, {:server_process, todo_list_name})
   end
 
