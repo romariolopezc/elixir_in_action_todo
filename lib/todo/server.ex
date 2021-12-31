@@ -1,5 +1,5 @@
 defmodule Todo.Server do
-  use GenServer
+  use GenServer, restart: :temporary
 
   def start_link(list_name) do
     IO.puts("Starting to-do server for #{list_name}")
