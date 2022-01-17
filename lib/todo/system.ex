@@ -9,7 +9,8 @@ defmodule Todo.System do
     children = [
       Todo.ProcessRegistry,
       Todo.Database,
-      Todo.Cache
+      Todo.Cache,
+      Todo.Web
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
