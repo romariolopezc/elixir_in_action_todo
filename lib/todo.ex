@@ -1,5 +1,5 @@
 defmodule Todo do
-  # TODO: Chapter 10
+  # TODO: Chapter 11.2
   @moduledoc """
   Documentation for `Todo`.
   """
