@@ -65,4 +65,6 @@ defmodule Todo.Server do
       pid -> pid
     end
   end
+
+  defp expiry_idle_timeot, do: Application.fetch_env!(:todo, :todo_item_expiry)
 end
