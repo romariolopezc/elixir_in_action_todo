@@ -1,5 +1,5 @@
 defmodule Todo do
-  # TODO: Page 298
+  # TODO: 12.2.5 Detecting partitions
   @moduledoc """
   Documentation for `Todo`.
   """
