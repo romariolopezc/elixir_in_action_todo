@@ -30,7 +30,7 @@ defmodule Todo.Database do
         :timer.seconds(5)
       )
 
-    Enum.each(bad_nodes, &IO.puts("Store failed on node #{&1}")
+    Enum.each(bad_nodes, &IO.puts("Store failed on node #{&1}"))
     :ok
   end
 
